@@ -29,6 +29,11 @@ bool MySQL::connect()
     {
         // 兼容中文
         mysql_query(_conn, "set names gbk");
+        LOG_INFO << "connect mysql sucess!!!";
+    }
+    else
+    {
+        LOG_INFO << "connect mysql failed!!!";
     }
     return p;
 }
@@ -55,4 +60,9 @@ MYSQL_RES* MySQL::query(string sql)
         return nullptr;
     }
     return mysql_use_result(_conn);
+}
+
+// 获取连接
+MYSQL * MySQL::getConnection(){
+    return _conn;
 }

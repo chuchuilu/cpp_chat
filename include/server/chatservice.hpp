@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <functional>
 #include "json.hpp"
+#include "usermodel.hpp"
 #include <muduo/base/Logging.h> // 确保包含了Muduo的日志头文件
 using namespace std;
 using namespace muduo;
@@ -37,6 +38,8 @@ private:
     // 存储详细id和对象的业务处理方法
     unordered_map<int, MsgHandler> _msgHandlerMap;
 
+    // 数据操作类对象
+    UserModel _userModel;
 
 
 };
