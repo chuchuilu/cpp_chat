@@ -42,10 +42,49 @@ MsgHandler ChatService::getHandler(int msgid)
     
 }
 
-// 处理登录业务
+// 处理登录业务  验证 id pwd 更新在线状态
 void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
 {
-    LOG_INFO << "DO LOGIN !!!";
+    int id = js["id"];
+    string pwd = js["password"];
+
+    User user = _userModel.query(id);
+    if (user.getId() == id && user.getPwd() == pwd)
+    {
+        if (user.getState() == "online")
+        {
+            // 用户已登录，不允许重复登陆
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["errno"] = 2;
+            response["errmsg"] = "账号已登录";
+            conn -> send(response.dump());
+        }
+        else
+        {
+            // 登录成功,更新用户状态信息
+            user.setState("online");
+            _userModel.updateState(user);
+
+            json response;
+            response["msgid"] = LOGIN_MSG_ACK;
+            response["errno"] = 0;
+            response["id"] = user.getId();
+            response["name"] = user.getName();
+            conn -> send(response.dump());
+        }
+    }
+    else
+    {
+        // 用户名或密码错误，登录失败
+        json response;
+        response["msgid"] = LOGIN_MSG_ACK;
+        response["errno"] = 1;
+        response["errmsg"] = "用户名或密码错误";
+        conn -> send(response.dump());
+
+    }
+    
 
 }
 
