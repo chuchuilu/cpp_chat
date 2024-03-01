@@ -62,6 +62,13 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
         }
         else
         {
+            // 登录成功，记录用户连接信息     涉及多线程同时增加到map，需要线程互斥操作
+            {
+                // 加锁
+                lock_guard<mutex> lock(_connMutex);
+                _userConnMap.insert({id, conn});
+                // 解锁
+            }
             // 登录成功,更新用户状态信息
             user.setState("online");
             _userModel.updateState(user);

@@ -6,6 +6,7 @@
 #include <functional>
 #include "json.hpp"
 #include "usermodel.hpp"
+#include <mutex>
 #include <muduo/base/Logging.h> // 确保包含了Muduo的日志头文件
 using namespace std;
 using namespace muduo;
@@ -37,6 +38,12 @@ private:
 
     // 存储详细id和对象的业务处理方法
     unordered_map<int, MsgHandler> _msgHandlerMap;
+
+    // 存储在线用户的通信连接
+    unordered_map<int, TcpConnectionPtr> _userConnMap;
+
+    // 互斥锁保证_user_ConnMap线程安全
+    mutex _connMutex;
 
     // 数据操作类对象
     UserModel _userModel;
