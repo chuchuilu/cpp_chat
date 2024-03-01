@@ -124,3 +124,34 @@ void ChatService::reg(const TcpConnectionPtr &conn, json &js, Timestamp time)
     }
     
 }
+
+
+// 处理客户端异常退出 逻辑：删除连接指针，用户在线状态 online -> offline
+void ChatService::clientCloseException(const TcpConnectionPtr &conn)
+{
+    // 查找 要加锁 
+    User user;
+    {
+        lock_guard<mutex> lock(_connMutex);
+
+        for(auto it = _userConnMap.begin(); it != _userConnMap.end(); ++it)
+        {
+            if (it -> second == conn)
+            {
+                // 从map表删除用户的连接信息
+                user.setId(it -> first);
+                _userConnMap.erase(it);
+                break;
+            }
+        }
+
+    }
+
+    // 更新用户的状态信息
+    if(user.getId() != -1)
+    {
+        user.setState("offline");
+        _userModel.updateState(user);
+    }
+
+}

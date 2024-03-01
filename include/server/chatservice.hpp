@@ -33,6 +33,8 @@ public:
     void reg(const TcpConnectionPtr &conn, json &js, Timestamp);
     // 获取消息对应的处理器
     MsgHandler getHandler(int msgid);
+    // 处理客户端异常退出
+    void clientCloseException(const TcpConnectionPtr &conn);
 private:
     ChatService();
 
