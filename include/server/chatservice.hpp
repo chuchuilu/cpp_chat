@@ -6,6 +6,7 @@
 #include <functional>
 #include "json.hpp"
 #include "usermodel.hpp"
+#include "offlinemessagemodel.hpp"
 #include <mutex>
 #include <muduo/base/Logging.h> // 确保包含了Muduo的日志头文件
 using namespace std;
@@ -51,7 +52,7 @@ private:
 
     // 数据操作类对象
     UserModel _userModel;
-
+    OfflineMessageModel _offlineMsgModel;
 
 };
 
