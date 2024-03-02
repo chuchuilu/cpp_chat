@@ -25,6 +25,13 @@ ChatService::ChatService()
     _msgHandlerMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2, _3)});
 }
 
+// 服务器异常，业务重置方法
+void ChatService::reset()
+{
+    // 把online状态用户，设置成offline
+    _userModel.resetState();
+}
+
 // 获取消息对应的处理器
 MsgHandler ChatService::getHandler(int msgid)
 {
