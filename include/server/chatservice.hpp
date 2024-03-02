@@ -6,6 +6,7 @@
 #include <functional>
 #include "json.hpp"
 #include "usermodel.hpp"
+#include "friendmodel.hpp"
 #include "offlinemessagemodel.hpp"
 #include <mutex>
 #include <muduo/base/Logging.h> // 确保包含了Muduo的日志头文件
@@ -34,6 +35,8 @@ public:
     void reg(const TcpConnectionPtr &conn, json &js, Timestamp);
     // 处理一对一聊天服务
     void oneChat(const TcpConnectionPtr &conn, json &js, Timestamp);
+    // 添加好友业务
+    void addFriend(const TcpConnectionPtr &conn, json &js, Timestamp);
     // 获取消息对应的处理器
     MsgHandler getHandler(int msgid);
     // 处理客户端异常退出
@@ -55,6 +58,7 @@ private:
     // 数据操作类对象
     UserModel _userModel;
     OfflineMessageModel _offlineMsgModel;
+    FriendModel _friendModel;
 
 };
 
