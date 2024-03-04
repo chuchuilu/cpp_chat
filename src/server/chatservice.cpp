@@ -69,7 +69,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
             json response;
             response["msgid"] = LOGIN_MSG_ACK;
             response["errno"] = 2;
-            response["errmsg"] = "账号已登录";
+            response["errmsg"] = "account is online";
             conn -> send(response.dump());
         }
         else
@@ -123,7 +123,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp time)
         json response;
         response["msgid"] = LOGIN_MSG_ACK;
         response["errno"] = 1;
-        response["errmsg"] = "用户名或密码错误";
+        response["errmsg"] = "username or password error";
         conn -> send(response.dump());
 
     }
