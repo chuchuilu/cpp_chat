@@ -9,6 +9,7 @@
 #include "friendmodel.hpp"
 #include "groupmodel.hpp"
 #include "offlinemessagemodel.hpp"
+#include "redis.hpp"
 #include <mutex>
 #include <muduo/base/Logging.h> // 确保包含了Muduo的日志头文件
 using namespace std;
@@ -52,6 +53,8 @@ public:
     void clientCloseException(const TcpConnectionPtr &conn);
     // 服务器异常，业务重置方法
     void reset();
+    // 从redis消息队列中获取订阅的消息
+    void handleRedisSubscribeMessage(int, string);
 private:
     ChatService();
 
@@ -69,6 +72,9 @@ private:
     OfflineMessageModel _offlineMsgModel;
     FriendModel _friendModel;
     GroupModel _groupModel;
+
+    // redis操作对象
+    Redis _redis;
 
 };
 
